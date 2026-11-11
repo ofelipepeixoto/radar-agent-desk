@@ -11,6 +11,7 @@ Este documento registra a primeira base pública e os avanços desde a publicaç
 | Primeira base pública | O núcleo ganhou entrada offline independente. A versão pública preserva o adaptador como opção, com limites e testes. O fluxo para evoluir passa a ser branch, revisão, testes, PR e registro no changelog. |
 | Operação local com Codex | Em WSL2, o teste de conexão por assinatura passou em uma pasta Git de laboratório separada dos dados. O Camaleão respondeu `OK` a uma tarefa de teste. A recuperação automática reportou rota não encontrada e o Board confirmou a conclusão manual. O [roteiro](AGENTES-PAPERCLIP-WSL.md) separa o teste do agente da captura, da restauração e da integração por chave. |
 | Equipe inicial | Engenharia Radar e Revisão Radar passaram nos testes de conexão e nas tarefas fictícias, com revisão do Board. A conta por assinatura ficou limitada aos três agentes escolhidos. A chave de API ficou como opção futura. |
+| Auditoria de conectores | O [registro de verificação](AUDITORIA-CONECTORES.md) separa o que o painel apresenta, o acesso concedido e o que foi testado. As integrações externas do painel não mudam o modo offline do kit. |
 | Interface local | O kit ganhou uma extensão opcional que traduz rótulos selecionados no Chrome, acionada por clique. A [tradução parcial](INTERFACE-PT-BR.md) não altera os dados nem a configuração do Paperclip. |
 
 ## Origem e licenças

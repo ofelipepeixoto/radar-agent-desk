@@ -4,6 +4,8 @@
 
 - Guia de operação no Paperclip local com Codex no WSL2: teste de conexão por assinatura, primeiras tarefas de Camaleão, Engenharia Radar e Revisão Radar, encerramento manual e diagnóstico da pasta de trabalho. O roteiro diferencia assinatura, API e revisão de resumo.
 
+- Roteiro de auditoria dos conectores do Paperclip: inventário, permissões, testes de leitura e registro público sem dados da conta. O kit e a captura em loopback não mudaram.
+
 - Extensão opcional para traduzir rótulos selecionados do Paperclip no Chrome, em loopback e após clique.
 
 - v0.4: roteiro e verificador offline de evidências MCP, com critérios de acesso, escopo e revogação. Integrações reais continuam sem homologação.
