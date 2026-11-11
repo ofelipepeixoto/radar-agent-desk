@@ -4,10 +4,11 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { captureLocal, probeLocal, LocalError, PAPERCLIP_VERSION, HTTP_DEADLINE_MS } from '../src/paperclip-local.mjs';
 import { detectEnvironment, diagnosticHint } from '../src/diagnostics.mjs';
+import { summarizeCountsCsv } from '../src/offline-csv.mjs';
 import { MAX_SNAPSHOT_BYTES, parseSnapshotJson, summarizeSnapshot, SnapshotError } from '../src/snapshot.mjs';
 
-const options = { port: {type:'string'}, company: {type:'string'}, input: {type:'string'}, out: {type:'string'} };
-const permissions = { check: [], doctor: [], probe: ['port'], demo: ['out'], snapshot: ['input','out'], capture: ['company','port','out'] };
+const options = { port: {type:'string'}, company: {type:'string'}, input: {type:'string'}, out: {type:'string'}, format: {type:'string'} };
+const permissions = { check: [], doctor: [], probe: ['port'], demo: ['out'], snapshot: ['input','out','format'], capture: ['company','port','out'] };
 const help = `Radar Agent Desk\n\n` +
   `  node bin/radar-agent-desk.mjs check\n` +
   `  node bin/radar-agent-desk.mjs doctor\n` +
@@ -15,6 +16,7 @@ const help = `Radar Agent Desk\n\n` +
   `  node bin/radar-agent-desk.mjs demo [--out local/demo.json]\n` +
   `  node bin/radar-agent-desk.mjs capture --company UUID [--port 3100] [--out local/resumo.json]\n` +
   `  node bin/radar-agent-desk.mjs snapshot --input ARQUIVO.json [--out local/resumo.json]\n` +
+  `  node bin/radar-agent-desk.mjs snapshot --format csv --input CONTAGENS.csv [--out local/resumo.json]\n` +
   `\nImportação offline por padrão. Captura opcional de Paperclip local. A saída não sobrescreve arquivos.\n`;
 
 function safeRead(path) {
@@ -84,7 +86,11 @@ async function main() {
   }
   const input = command === 'demo' ? fileURLToPath(new URL('../fixtures/contagens-exemplo.json', import.meta.url)) : values.input;
   if (!input) throw new LocalError('ARQUIVO_INPUT_EXIGIDO');
-  emit(summarizeSnapshot(parseSnapshotJson(safeRead(input))), values.out);
+  const format = values.format ?? 'json';
+  if (format !== 'json' && format !== 'csv') throw new LocalError('FORMATO_INVALIDO_USE_JSON_OU_CSV');
+  const bytes = safeRead(input);
+  const summary = format === 'csv' ? summarizeCountsCsv(bytes) : summarizeSnapshot(parseSnapshotJson(bytes));
+  emit(summary, values.out);
 }
 
 main().catch(error => {

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "source": "radar-offline",
+  "authenticity": "not_verified_by_summary",
+  "scopeEvidence": "operator_declared_counts_no_auth_claim",
+  "dashboard": {
+    "state": "available",
+    "coverage": "operator_declared_aggregate",
+    "open": 8,
+    "inProgress": 3,
+    "blocked": 2,
+    "done": 5,
+    "pendingApprovals": 1
+  },
+  "taskPage": {
+    "state": "unavailable"
+  },
+  "pendingApprovals": {
+    "state": "unavailable"
+  },
+  "humanApprovalRequired": true,
+  "actionsExecuted": false
+}

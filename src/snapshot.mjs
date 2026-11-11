@@ -8,7 +8,7 @@ const MAX_APPROVALS = 100;
 const MAX_DASHBOARD_COUNT = 1_000_000_000;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const SOURCES = ['fixture', 'paperclip-native-mcp', 'paperclip-local-rest', 'radar-offline'];
-const COUNT_KEYS = ['open', 'inProgress', 'blocked', 'done', 'pendingApprovals'];
+export const OFFLINE_COUNT_KEYS = Object.freeze(['open', 'inProgress', 'blocked', 'done', 'pendingApprovals']);
 const TASK_STATUSES = ['backlog', 'todo', 'in_progress', 'in_review', 'done', 'blocked', 'cancelled'];
 const APPROVAL_TYPES = ['hire_agent', 'approve_ceo_strategy', 'budget_override_required', 'request_board_approval'];
 
@@ -185,7 +185,7 @@ export function summarizeSnapshot(input) {
   assertCompact(input);
   check(record(input) && input.schemaVersion === 1 && SOURCES.includes(input.source), 'INVALID_SNAPSHOT');
   if (input.source === 'radar-offline') {
-    check(hasExactKeys(input, ['schemaVersion', 'source', 'counts']) && hasExactKeys(input.counts, COUNT_KEYS), 'INVALID_OFFLINE_COUNTS_FORMAT');
+    check(hasExactKeys(input, ['schemaVersion', 'source', 'counts']) && hasExactKeys(input.counts, OFFLINE_COUNT_KEYS), 'INVALID_OFFLINE_COUNTS_FORMAT');
     return summary(input.source, 'operator_declared_counts_no_auth_claim', aggregateSummary(input.counts, 'operator_declared_aggregate'));
   }
   const connection = input.connection;
