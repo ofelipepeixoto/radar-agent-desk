@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "radar-agent-desk-review",
+  "version": "0.1.0",
+  "description": "Revisão consultiva de resumos do Radar Agent Desk em português.",
+  "author": {
+    "name": "Carlos Felipe Peixoto"
+  },
+  "repository": "https://github.com/ofelipepeixoto/radar-agent-desk",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Radar Agent Desk Review",
+        "shortDescription": "Revisão de operações",
+        "longDescription": "Interpreta contagens offline e resumos de um adaptador opcional. O pacote fornece instruções e não instala servidor, executa agentes ou aprova ações.",
+        "developerName": "Carlos Felipe Peixoto",
+        "category": "Productivity",
+        "capabilities": [
+          "Interactive"
+        ],
+        "defaultPrompt": "Revise este resumo do Radar Agent Desk e diga o que precisa de atenção."
+      }
+    }
+  }
+}
