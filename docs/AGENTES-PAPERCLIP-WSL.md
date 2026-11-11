@@ -62,6 +62,8 @@ No ensaio no WSL, o Camaleão respondeu `OK`, o caminho automático de recupera�
 
 No painel, abra **Agentes** e use a opção de adicionar um agente. Para cada função, escolha **Codex**, dê acesso à conexão por assinatura quando ela for necessária, salve as instruções em português e repita o teste do runtime. Use um agente por tarefa. O Board decide quando aceitar o resultado ou pedir outra rodada.
 
+Para agrupar o trabalho, use **Projetos → Add Project** e crie um projeto chamado **Radar Agent Desk**. Uma descrição simples basta: Camaleão organiza, Engenharia propõe mudanças, Revisão confere e o Board decide. Selecione o projeto ao criar a tarefa. No ensaio, o projeto foi criado só para organizar o trabalho; não foi associado a um repositório nem a uma pasta de código.
+
 | Agente | Entrega | Primeiro teste sem ferramentas |
 | --- | --- | --- |
 | **Camaleão** | Organiza prioridades, transforma um pedido em tarefa e aponta bloqueios e próximos passos para o Board. | `Responda apenas OK, sem ler ou alterar arquivos.` |
