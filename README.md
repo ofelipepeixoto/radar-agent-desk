@@ -24,6 +24,7 @@ O primeiro comando do kit checa o Node. Se estiver no Windows, `node bin/radar-a
 | Revisar no ChatGPT | Anexe só o JSON de saída e use o [prompt de revisão](docs/REVISAO-CHATGPT.md). |
 | Consultar meu Paperclip local | Siga o [guia do adaptador opcional](docs/INSTALACAO-WINDOWS.md#3-adaptador-opcional-paperclip-local). O servidor é instalado à parte. Veja também a [avaliação de versões e o ensaio de restauração](docs/OPERACAO-LOCAL.md). |
 | Operar agentes no Paperclip | Siga o [passo a passo para Windows e WSL2](docs/AGENTES-PAPERCLIP-WSL.md): login do Codex, teste de conexão, primeira tarefa e revisão manual. |
+| Conferir conectores do painel | Use a [auditoria de conectores](docs/AUDITORIA-CONECTORES.md) para separar conexão salva, permissões e teste observado. |
 | Traduzir rótulos do painel | Veja a [tradução local e parcial no Chrome](docs/INTERFACE-PT-BR.md). |
 | Evoluir pelo terminal | Siga [Desenvolver com Codex](docs/DESENVOLVER-COM-CODEX.md) e pegue a primeira tarefa do [roadmap](ROADMAP.md). |
 

@@ -4,6 +4,8 @@
 
 O Radar Agent Desk continua offline. O adaptador local não usa OAuth nem vira servidor remoto. O MCP nativo do Paperclip é um candidato separado, ainda **não homologado**. A prova desta entrega é uma inspeção de fonte e um teste sintético do registro de evidência. Nenhum serviço, conta, túnel, webhook ou credencial foi configurado.
 
+Para verificar conexões de ferramentas no painel local, consulte a [auditoria de conectores](AUDITORIA-CONECTORES.md). Ela cobre outro fluxo e não substitui a prova autenticada de MCP, n8n ou Cloudflare descrita abaixo.
+
 | Opção | Uso recomendado | Condição para avançar |
 | --- | --- | --- |
 | Arquivo reduzido | Revisão manual no ChatGPT. | Conferir localmente o JSON e autorizar seu compartilhamento. Funciona sem integração. |

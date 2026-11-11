@@ -89,3 +89,5 @@ Use uma chave de projeto somente em uma instância e com um agente aprovados par
 Para a equipe inicial sob demanda, a decisão foi manter a assinatura. Considere um piloto por chave apenas para uma necessidade que ela não atende, como um consumidor direto da API, isolamento de cobrança por projeto ou uma limitação comprovada da assinatura. Use um projeto e agente dedicados, combine um teto antes do teste, acompanhe o uso e confirme como revogar o acesso. Não mude o login dos agentes que já funcionam para testar uma alternativa.
 
 Para evoluir, acrescente uma função por vez, descreva o que ela entrega e rode o primeiro teste com dados fictícios. Registre o resultado e o que ainda falta validar antes de habilitar rede, automação recorrente ou acesso a sistemas de trabalho. Para a documentação e a CLI, use o [fluxo de revisão por PR](DESENVOLVER-COM-CODEX.md).
+
+Para verificar contas salvas, permissões e chamadas a ferramentas externas, use a [auditoria de conectores](AUDITORIA-CONECTORES.md).
