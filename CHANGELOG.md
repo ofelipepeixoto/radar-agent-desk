@@ -2,6 +2,8 @@
 
 ## Em revisão
 
+- v0.3: cópia fria e restauração da camada PostgreSQL verificadas em laboratório. Canary comparado, sem trocar a versão do adaptador.
+
 - v0.2: importação offline de totais em CSV, esquema JSON v1 e saída idêntica para os mesmos números.
 
 - v0.1.1: diagnóstico offline de Node e ambiente; mensagens distintas para conexão recusada, resposta incompleta e versão incompatível.
