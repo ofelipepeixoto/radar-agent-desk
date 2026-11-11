@@ -1,6 +1,6 @@
 # Histórico de construção
 
-Este documento registra o que levou à primeira base pública. Os commits públicos começam na publicação deste repositório. O relato abaixo descreve o trabalho anterior; as datas dos commits não foram recriadas.
+Este documento registra a primeira base pública e os avanços desde a publicação. O trabalho anterior é descrito como relato: as datas dos commits não foram recriadas.
 
 | Etapa | Decisão e resultado |
 | --- | --- |
@@ -9,6 +9,9 @@ Este documento registra o que levou à primeira base pública. Os commits públi
 | Revisão em português | O resumo passou a separar números observados de dados ausentes e a omitir nomes, IDs e textos. A revisão pode ser feita com um arquivo anexado. Um pacote opcional guarda só instruções. |
 | Instalação em PC | A instância Paperclip abriu no navegador do Windows e houve uma execução Codex bem-sucedida observada no painel. Isso prova o funcionamento daquele ambiente, não a captura do kit ou OAuth do ChatGPT. Os tropeços com shell, versão do Node e pasta extraída orientaram o guia. |
 | Primeira base pública | O núcleo ganhou entrada offline independente. A versão pública preserva o adaptador como opção, com limites e testes. O fluxo para evoluir passa a ser branch, revisão, testes, PR e registro no changelog. |
+| Operação local com Codex | Em WSL2, o teste de conexão por assinatura passou em uma pasta Git de laboratório separada dos dados. O Camaleão respondeu `OK` a uma tarefa de teste. A recuperação automática reportou rota não encontrada e o Board confirmou a conclusão manual. O [roteiro](AGENTES-PAPERCLIP-WSL.md) separa o teste do agente da captura, da restauração e da integração por chave. |
+| Equipe inicial | Engenharia Radar e Revisão Radar passaram nos testes de conexão e nas tarefas fictícias, com revisão do Board. A conta por assinatura ficou limitada aos três agentes escolhidos. A chave de API ficou como opção futura. |
+| Interface local | O kit ganhou uma extensão opcional que traduz rótulos selecionados no Chrome, acionada por clique. A [tradução parcial](INTERFACE-PT-BR.md) não altera os dados nem a configuração do Paperclip. |
 
 ## Origem e licenças
 

@@ -2,6 +2,10 @@
 
 ## Em revisão
 
+- Guia de operação no Paperclip local com Codex no WSL2: teste de conexão por assinatura, primeiras tarefas de Camaleão, Engenharia Radar e Revisão Radar, encerramento manual e diagnóstico da pasta de trabalho. O roteiro diferencia assinatura, API e revisão de resumo.
+
+- Extensão opcional para traduzir rótulos selecionados do Paperclip no Chrome, em loopback e após clique.
+
 - v0.4: roteiro e verificador offline de evidências MCP, com critérios de acesso, escopo e revogação. Integrações reais continuam sem homologação.
 
 - v0.3: cópia fria e restauração da camada PostgreSQL verificadas em laboratório. Canary comparado, sem trocar a versão do adaptador.

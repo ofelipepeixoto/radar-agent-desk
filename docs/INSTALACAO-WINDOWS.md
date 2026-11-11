@@ -98,4 +98,4 @@ cd "$RADAR_DESK_LAB" &&
 npx --yes --registry=https://registry.npmjs.org paperclipai@2026.1106.0 run --data-dir "$RADAR_DESK_LAB"
 ```
 
-A assinatura usada pelo agente dentro do Paperclip e uma conexão MCP para o ChatGPT consultar o painel são fluxos separados. O guia local não precisa de MCP nem expõe a porta.
+Este passo a passo instala o painel para testar a **captura de contagens**, sem agente. Para configurar o Codex em uma instância local de teste e validar a primeira tarefa, siga [Operar agentes no Paperclip](AGENTES-PAPERCLIP-WSL.md). O guia de agentes trata separadamente da pasta Git de trabalho, da assinatura e da chave de API. O guia local não precisa de MCP nem expõe a porta.
