@@ -25,7 +25,7 @@ O primeiro comando do kit checa o Node. Se estiver no Windows, `node bin/radar-a
 | Consultar meu Paperclip local | Siga o [guia do adaptador opcional](docs/INSTALACAO-WINDOWS.md#3-adaptador-opcional-paperclip-local). O servidor é instalado à parte. |
 | Evoluir pelo terminal | Siga [Desenvolver com Codex](docs/DESENVOLVER-COM-CODEX.md) e pegue a primeira tarefa do [roadmap](ROADMAP.md). |
 
-O [contrato de entrada e saída](docs/SNAPSHOT.md) explica a diferença entre números informados pelo operador, leitura local e recorte MCP. Tarefas em execução ou bloqueadas já estão incluídas em abertas. Uma fonte indisponível não equivale a zero.
+Também dá para importar [uma linha de totais de planilha](docs/IMPORTACAO-OFFLINE.md) em CSV, sem rede. O [contrato de entrada e saída](docs/SNAPSHOT.md) explica a diferença entre números informados pelo operador, leitura local e recorte MCP. Tarefas em execução ou bloqueadas já estão incluídas em abertas. Uma fonte indisponível não equivale a zero.
 
 ## Como o projeto evolui
 

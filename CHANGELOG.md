@@ -2,6 +2,8 @@
 
 ## Em revisão
 
+- v0.2: importação offline de totais em CSV, esquema JSON v1 e saída idêntica para os mesmos números.
+
 - v0.1.1: diagnóstico offline de Node e ambiente; mensagens distintas para conexão recusada, resposta incompleta e versão incompatível.
 
 ## 0.1.0 | 11/11/2026
