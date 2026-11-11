@@ -23,6 +23,8 @@ O primeiro comando do kit checa o Node. Se estiver no Windows, `node bin/radar-a
 | Gerar um resumo dos meus totais | Copie o [exemplo](fixtures/contagens-exemplo.json) para `local/entrada.json`, edite apenas os cinco números e rode `node bin/radar-agent-desk.mjs snapshot --input local/entrada.json --out local/resumo.json`. |
 | Revisar no ChatGPT | Anexe só o JSON de saída e use o [prompt de revisão](docs/REVISAO-CHATGPT.md). |
 | Consultar meu Paperclip local | Siga o [guia do adaptador opcional](docs/INSTALACAO-WINDOWS.md#3-adaptador-opcional-paperclip-local). O servidor é instalado à parte. Veja também a [avaliação de versões e o ensaio de restauração](docs/OPERACAO-LOCAL.md). |
+| Operar agentes no Paperclip | Siga o [passo a passo para Windows e WSL2](docs/AGENTES-PAPERCLIP-WSL.md): login do Codex, teste de conexão, primeira tarefa e revisão manual. |
+| Traduzir rótulos do painel | Veja a [tradução local e parcial no Chrome](docs/INTERFACE-PT-BR.md). |
 | Evoluir pelo terminal | Siga [Desenvolver com Codex](docs/DESENVOLVER-COM-CODEX.md) e pegue a primeira tarefa do [roadmap](ROADMAP.md). |
 
 Também dá para importar [uma linha de totais de planilha](docs/IMPORTACAO-OFFLINE.md) em CSV, sem rede. O [contrato de entrada e saída](docs/SNAPSHOT.md) explica a diferença entre números informados pelo operador, leitura local e recorte MCP. Tarefas em execução ou bloqueadas já estão incluídas em abertas. Uma fonte indisponível não equivale a zero.
