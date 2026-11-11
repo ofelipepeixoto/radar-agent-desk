@@ -8,6 +8,7 @@ import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { captureLocal, probeLocal, readPort } from '../src/paperclip-local.mjs';
+import { detectEnvironment } from '../src/diagnostics.mjs';
 
 const run = promisify(execFile);
 const bin = fileURLToPath(new URL('../bin/radar-agent-desk.mjs', import.meta.url));
@@ -51,6 +52,49 @@ function source(t, changes = {}) {
   };
   return listen(t, (req, res) => Object.hasOwn(values, req.url) ? json(res, values[req.url]) : json(res, { error: privateText }, 404));
 }
+
+test('doctor identifies WSL kernels without returning usernames or paths', async () => {
+  assert.equal(detectEnvironment('linux', '6.6.87.2-microsoft-standard-WSL2'), 'wsl2');
+  assert.equal(detectEnvironment('linux', '4.4.0-19041-Microsoft'), 'wsl');
+  assert.equal(detectEnvironment('linux', '6.12.0-generic'), 'linux');
+  assert.equal(detectEnvironment('win32', '10.0'), 'windows');
+  const { stdout, stderr } = await run(process.execPath, [bin, 'doctor']);
+  const result = JSON.parse(stdout);
+  assert.equal(stderr, '');
+  assert.equal(result.status, 'ok');
+  assert.equal(result.ambiente, detectEnvironment());
+  assert.deepEqual(Object.keys(result).sort(), ['ambiente', 'node', 'proximoPasso', 'status']);
+});
+
+test('CLI separates refused loopback connection, stalled response and incompatible version without echoing payloads', { timeout: 12_000 }, async (t) => {
+  const closed = createServer();
+  await new Promise((resolve, reject) => closed.listen(0, '127.0.0.1', resolve).once('error', reject));
+  const closedPort = String(closed.address().port);
+  await new Promise((resolve, reject) => closed.close((error) => error ? reject(error) : resolve()));
+  const stalled = await listen(t, (_req, res) => {
+    res.writeHead(200, { 'content-type': 'application/json' });
+    res.write(`{"message":"${privateText}`);
+  });
+  const incompatible = await source(t, { '/api/health': { ...health, serverVersion: privateText } });
+  const cases = [
+    [closedPort, /PAPERCLIP_CONEXAO_RECUSADA/, /porta certa/],
+    [stalled.port, /PAPERCLIP_TEMPO_ESGOTADO/, /3 segundos/],
+    [incompatible.port, /VERSAO_PAPERCLIP_NAO_HOMOLOGADA/, /2026\.1106\.0/],
+  ];
+  await Promise.all(cases.map(([port, code, hint]) => assert.rejects(
+    run(process.execPath, [bin, 'probe', '--port', port]),
+    (error) => {
+      assert.equal(error.code, 1);
+      assert.equal(error.stdout, '');
+      assert.match(error.stderr, code);
+      assert.match(error.stderr, hint);
+      assert.doesNotMatch(error.stderr, new RegExp(privateText));
+      return true;
+    },
+  )));
+  assert.deepEqual(stalled.seen.map(({ path }) => path), ['/api/health']);
+  assert.deepEqual(incompatible.seen.map(({ path }) => path), ['/api/health']);
+});
 
 test('local capture issues exactly three fixed GET requests for the selected company without forwarding credentials', async (t) => {
   const { port, seen } = await source(t);

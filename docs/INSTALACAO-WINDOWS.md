@@ -11,7 +11,7 @@ wsl --list --verbose
 wsl -d Ubuntu
 ```
 
-Use a distribuição Ubuntu com versão `2`. A partir daqui, todos os comandos com `bash` são no **Ubuntu**, onde o prompt costuma terminar em `$`. O Node que aparece no PowerShell é o do Windows. Confira no Ubuntu:
+Use a distribuição Ubuntu com versão `2`. Espere o prompt mudar de `PS C:\Users\...>` para um prompt do Ubuntu que termine em `$`. Se ainda começa com `PS`, não cole comandos Bash ali. O Node que aparece no PowerShell é o do Windows. Confira no Ubuntu:
 
 ```bash
 node --version
@@ -30,14 +30,14 @@ cd "$HOME/projetos"
 git clone https://github.com/ofelipepeixoto/radar-agent-desk.git
 cd "$HOME/projetos/radar-agent-desk" &&
 test -f bin/radar-agent-desk.mjs &&
-node bin/radar-agent-desk.mjs check &&
+node bin/radar-agent-desk.mjs doctor &&
 mkdir -p local &&
 node bin/radar-agent-desk.mjs demo --out local/demo.json
 ```
 
 Se já clonou, pule o `git clone`. Se preferir ZIP, baixe por **Code → Download ZIP** na página do projeto. Extraia e entre na pasta que contém `bin/radar-agent-desk.mjs`. Um ZIP serve para experimentar, mas use o clone Git para desenvolver.
 
-A checagem retorna `"status": "ok"` e a demo gera `local/demo.json`. Se já existir, escolha outro nome para a saída. Para localizar o arquivo no Windows, rode `explorer.exe local`. Se não encontrar a CLI, rode `pwd` e `ls bin` para conferir a pasta. O kit não precisa de `npm install`.
+A checagem retorna `"status": "ok"` e a demo gera `local/demo.json`. Se já existir, escolha outro nome para a saída. Para localizar o arquivo no Windows, rode `explorer.exe local`. Se aparecer `MODULE_NOT_FOUND`, rode `pwd` e `ls bin`. Você precisa estar na pasta que contém `bin/radar-agent-desk.mjs`; um ZIP pode criar uma pasta extra dentro da primeira. Se aparecer `node: command not found`, volte à etapa 1 dentro do Ubuntu. O kit não precisa de `npm install`.
 
 Para testar com suas próprias contagens, copie `fixtures/contagens-exemplo.json` para `local/entrada.json`, edite os cinco números e rode:
 
@@ -70,6 +70,15 @@ node bin/radar-agent-desk.mjs probe
 ```
 
 O esperado é `status: ok`, versão `2026.1106.0`, `local_trusted` e exposição `private`. Um SHA ausente é reportado como não confirmado; um SHA declarado diferente é recusado. Se mudou a porta, acrescente `--port 4310` ao `probe` e à captura.
+
+Se o diagnóstico falhar, use o código para decidir o próximo passo:
+
+| Código | O que fazer |
+| --- | --- |
+| `PAPERCLIP_CONEXAO_RECUSADA` | Confira se o servidor está aberto neste Ubuntu e se a porta é a mesma. |
+| `PAPERCLIP_TEMPO_ESGOTADO` | Aguarde o painel carregar. O kit encerra cada requisição após 3 segundos. |
+| `VERSAO_PAPERCLIP_NAO_HOMOLOGADA` | Use a importação offline. A captura não aceita automaticamente uma versão diferente. |
+| `COMMIT_PAPERCLIP_DIVERGENTE` | Inicie a versão homologada fora da pasta de outro repositório Git. |
 
 No navegador local, abra `http://localhost:3100/api/companies` com a mesma porta da instância e copie o `id` da empresa de teste. Mantenha a lista bruta no computador. Substitua `COLE_O_ID_AQUI` abaixo:
 

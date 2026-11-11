@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Radar Agent Desk: contagens declaradas, versão 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "source", "counts"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "source": { "const": "radar-offline" },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["open", "inProgress", "blocked", "done", "pendingApprovals"],
+      "properties": {
+        "open": { "$ref": "#/$defs/count" },
+        "inProgress": { "$ref": "#/$defs/count" },
+        "blocked": { "$ref": "#/$defs/count" },
+        "done": { "$ref": "#/$defs/count" },
+        "pendingApprovals": { "$ref": "#/$defs/count" }
+      }
+    }
+  },
+  "$defs": {
+    "count": { "type": "integer", "minimum": 0, "maximum": 1000000000 }
+  }
+}

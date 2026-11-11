@@ -2,17 +2,21 @@
 import { constants as fs, closeSync, fstatSync, openSync, readSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { captureLocal, probeLocal, LocalError, PAPERCLIP_VERSION } from '../src/paperclip-local.mjs';
+import { captureLocal, probeLocal, LocalError, PAPERCLIP_VERSION, HTTP_DEADLINE_MS } from '../src/paperclip-local.mjs';
+import { detectEnvironment, diagnosticHint } from '../src/diagnostics.mjs';
+import { summarizeCountsCsv } from '../src/offline-csv.mjs';
 import { MAX_SNAPSHOT_BYTES, parseSnapshotJson, summarizeSnapshot, SnapshotError } from '../src/snapshot.mjs';
 
-const options = { port: {type:'string'}, company: {type:'string'}, input: {type:'string'}, out: {type:'string'} };
-const permissions = { check: [], probe: ['port'], demo: ['out'], snapshot: ['input','out'], capture: ['company','port','out'] };
+const options = { port: {type:'string'}, company: {type:'string'}, input: {type:'string'}, out: {type:'string'}, format: {type:'string'} };
+const permissions = { check: [], doctor: [], probe: ['port'], demo: ['out'], snapshot: ['input','out','format'], capture: ['company','port','out'] };
 const help = `Radar Agent Desk\n\n` +
   `  node bin/radar-agent-desk.mjs check\n` +
+  `  node bin/radar-agent-desk.mjs doctor\n` +
   `  node bin/radar-agent-desk.mjs probe [--port 3100]\n` +
   `  node bin/radar-agent-desk.mjs demo [--out local/demo.json]\n` +
   `  node bin/radar-agent-desk.mjs capture --company UUID [--port 3100] [--out local/resumo.json]\n` +
   `  node bin/radar-agent-desk.mjs snapshot --input ARQUIVO.json [--out local/resumo.json]\n` +
+  `  node bin/radar-agent-desk.mjs snapshot --format csv --input CONTAGENS.csv [--out local/resumo.json]\n` +
   `\nImportação offline por padrão. Captura opcional de Paperclip local. A saída não sobrescreve arquivos.\n`;
 
 function safeRead(path) {
@@ -40,12 +44,23 @@ function emit(value, destination) {
   catch { throw new LocalError('SAIDA_NAO_GRAVADA_CONFIRA_PASTA_E_NOME_NOVO'); }
 }
 
-function check() {
+function requireNodeVersion() {
   const [major, minor] = process.versions.node.split('.').map(Number);
   if (major < 24 || (major === 24 && minor < 11)) throw new LocalError('NODE_24_11_OU_SUPERIOR_EXIGIDO');
+}
+
+function check() {
   emit({ status:'ok', node:process.versions.node, platform:process.platform,
     paperclipTarget:PAPERCLIP_VERSION, paperclipInstalled:'not_checked',
     note:'Use probe para checar a instância local após abrir o Paperclip.' });
+}
+
+function doctor() {
+  const ambiente = detectEnvironment();
+  emit({ status: 'ok', node: process.versions.node, ambiente,
+    proximoPasso: ambiente === 'windows'
+      ? 'A demo funciona neste Node. Se o Paperclip estiver no WSL, abra o Ubuntu antes de usar probe.'
+      : 'Rode demo para testar sem rede. Use probe só depois de iniciar o Paperclip neste ambiente.' });
 }
 
 async function main() {
@@ -60,7 +75,9 @@ async function main() {
   if (new Set(names).size !== names.length || names.some(n => !permissions[command].includes(n) || !values[n])) {
     throw new LocalError('ARGUMENTOS_INVALIDOS_USE_HELP');
   }
+  requireNodeVersion();
   if (command === 'check') { check(); return; }
+  if (command === 'doctor') { doctor(); return; }
   if (command === 'probe') { emit(await probeLocal(values.port)); return; }
   if (command === 'capture') {
     const summary = summarizeSnapshot(await captureLocal({companyId: values.company, port: values.port}));
@@ -69,12 +86,17 @@ async function main() {
   }
   const input = command === 'demo' ? fileURLToPath(new URL('../fixtures/contagens-exemplo.json', import.meta.url)) : values.input;
   if (!input) throw new LocalError('ARQUIVO_INPUT_EXIGIDO');
-  emit(summarizeSnapshot(parseSnapshotJson(safeRead(input))), values.out);
+  const format = values.format ?? 'json';
+  if (format !== 'json' && format !== 'csv') throw new LocalError('FORMATO_INVALIDO_USE_JSON_OU_CSV');
+  const bytes = safeRead(input);
+  const summary = format === 'csv' ? summarizeCountsCsv(bytes) : summarizeSnapshot(parseSnapshotJson(bytes));
+  emit(summary, values.out);
 }
 
 main().catch(error => {
   // Unexpected exceptions and raw payloads are never echoed to the operator.
-  const code = error instanceof LocalError || error instanceof SnapshotError ? error.code : 'ERRO_NAO_CLASSIFICADO';
-  process.stderr.write(`Radar Agent Desk: ${code ?? 'ERRO_NAO_CLASSIFICADO'}\n`);
+  const code = (error instanceof LocalError || error instanceof SnapshotError ? error.code : null) ?? 'ERRO_NAO_CLASSIFICADO';
+  const hint = diagnosticHint(code, { paperclipVersion: PAPERCLIP_VERSION, deadlineSeconds: HTTP_DEADLINE_MS / 1000 });
+  process.stderr.write(`Radar Agent Desk: ${code}\n${hint ? `${hint}\n` : ''}`);
   process.exitCode = 1;
 });
