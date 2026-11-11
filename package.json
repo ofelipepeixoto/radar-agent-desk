@@ -1,0 +1,10 @@
+{
+  "name": "radar-agent-desk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Kit local para preparar resumos de operação de agentes e revisar no ChatGPT",
+  "license": "MIT",
+  "engines": { "node": ">=24.11.0" },
+  "scripts": { "test": "node --test test/*.test.mjs", "demo": "node bin/radar-agent-desk.mjs demo", "check": "node bin/radar-agent-desk.mjs check" }
+}

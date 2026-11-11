@@ -1,0 +1,16 @@
+node_modules/
+local/
+dist/
+*.log
+__pycache__/
+*.pyc
+.env*
+.codex/
+.paperclip*/
+.radar-agent-desk-paperclip-lab/
+auth.json
+credentials.json
+*.db
+*.sqlite*
+*.pem
+*.key

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "source": "radar-offline",
+  "counts": {
+    "open": 8,
+    "inProgress": 3,
+    "blocked": 2,
+    "done": 5,
+    "pendingApprovals": 1
+  }
+}
