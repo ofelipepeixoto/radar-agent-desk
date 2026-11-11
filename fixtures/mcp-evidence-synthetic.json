@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "environment": "synthetic",
+  "preflight": {
+    "authenticatedInstance": true,
+    "canonicalHttps": true,
+    "fictionalRecordsOnly": true,
+    "dependencyReviewCompleted": true
+  },
+  "grantedScopes": ["paperclip:read"],
+  "observed": {
+    "withoutCredential": "authentication-denied",
+    "connectionIdentityAndCompany": "allowed",
+    "readOwnCompany": "allowed",
+    "readOtherCompany": "company-denied",
+    "taskWrite": "scope-denied",
+    "agentConfigure": "scope-denied",
+    "revokeOwnGrant": "revoked",
+    "readWithRevokedGrant": "authentication-denied",
+    "readAfterMembershipRemoval": "authentication-denied"
+  }
+}
