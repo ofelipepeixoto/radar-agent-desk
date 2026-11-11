@@ -1,0 +1,22 @@
+name: Verificar Radar Agent Desk
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    name: Verificação local
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm test
+      - run: node bin/radar-agent-desk.mjs check
+      - run: node bin/radar-agent-desk.mjs demo
+      - run: python3 -m unittest discover -s test -p 'test_plugin_pack.py'
+      - run: python3 scripts/pack-plugin.py --check
