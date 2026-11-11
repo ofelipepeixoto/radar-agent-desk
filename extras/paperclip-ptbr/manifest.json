@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Radar Agent Desk | Paperclip em português",
+  "description": "Traduz localmente os rótulos selecionados do Paperclip com um clique.",
+  "version": "0.1.0",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_title": "Alternar os rótulos em português no Paperclip local"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'; connect-src 'none'"
+  }
+}
