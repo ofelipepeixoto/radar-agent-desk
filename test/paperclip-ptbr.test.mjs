@@ -68,6 +68,12 @@ function documentFixture({ title = "Agente fictício • Agents • Paperclip", 
   runtime.register("h3#agent-runtime-heading", runtimeHeading);
   runtime.register("div.space-y-3 > div > span:first-child", roleLabel);
   main.register('section[aria-labelledby="agent-runtime-heading"]', runtime);
+  const recent = element("SECTION");
+  const seeAll = element("A", "See All ", { href: "/demo/issues?participantAgentId=ficticio" });
+  const arrow = { nodeType: 3, nodeValue: "→", isConnected: true };
+  seeAll.childNodes.push(arrow);
+  recent.register("a[href]", seeAll);
+  main.register('section[aria-labelledby="agent-recent-tasks-heading"]', recent);
   const caps = element("SECTION");
   const markdown = element("P", "No capability summary has been added.");
   caps.register("p", markdown);
@@ -82,7 +88,7 @@ function documentFixture({ title = "Agente fictício • Agents • Paperclip", 
   window.top = topFrame ? window : {};
   const context = createContext({ URL, document, location: { href: href ?? "http://localhost:3100/demo/agents/exemplo/overview" }, window });
   return { context, dashboard, tasks, external, namedAgent, titledTask, newTask, editors, work, agentName,
-    runLabel, pause, overview, overviewLink, namedPlugin, otherAgent, skills, runtimeHeading, roleLabel, agentValue, markdown };
+    runLabel, pause, overview, overviewLink, namedPlugin, otherAgent, skills, runtimeHeading, roleLabel, agentValue, markdown, seeAll, arrow };
 }
 
 const text = (anchor) => anchor.children[0].node.nodeValue;
@@ -155,6 +161,8 @@ test("translates static labels while preserving names, task titles, values and f
   assert.equal(fixture.roleLabel.node.nodeValue, "Função");
   assert.equal(fixture.agentName.node.nodeValue, "Overview");
   assert.equal(fixture.agentValue.node.nodeValue, "Role");
+  assert.equal(fixture.seeAll.node.nodeValue, "Ver tudo ");
+  assert.equal(fixture.arrow.nodeValue, "→");
   assert.equal(fixture.markdown.node.nodeValue, "No capability summary has been added.");
   assert.equal(text(fixture.external), "Dashboard");
   assert.equal(text(fixture.namedAgent), "Agents");

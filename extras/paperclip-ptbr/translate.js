@@ -171,7 +171,7 @@
         translateLinks(section, [[route, ...(route === "runtime" ? ["Configure", "Configurar"] : ["Manage", "Gerenciar"])]], localAgentLink);
       }
       if (id === "agent-recent-tasks-heading") {
-        translateLinks(section, [["issues", "See All →", "Ver tudo →"]],
+        translateLinks(section, [["issues", "See All →", "Ver tudo →"], ["issues", "See All", "Ver tudo"]],
           (url, route) => routeEquals(url, route) && url.searchParams.has("participantAgentId"));
       }
       if (id === "agent-audit-links-heading") {
