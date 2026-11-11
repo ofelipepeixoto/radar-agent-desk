@@ -4,7 +4,7 @@ export const PAPERCLIP_VERSION = '2026.1106.0';
 export const PAPERCLIP_COMMIT = 'd69631b01b9c658f80bf8bed389863dce82643e1';
 export const DEFAULT_PORT = 3100;
 const MAX_HTTP_BYTES = 256 * 1024;
-const HTTP_DEADLINE_MS = 3_000;
+export const HTTP_DEADLINE_MS = 3_000;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 export class LocalError extends Error {
@@ -54,7 +54,9 @@ function getJson(port, path) {
       });
     });
     const deadline = setTimeout(() => { fail('PAPERCLIP_TEMPO_ESGOTADO'); req.destroy(); }, HTTP_DEADLINE_MS);
-    req.on('error', () => fail('PAPERCLIP_INDISPONIVEL'));
+    req.on('error', (error) => {
+      fail(error.code === 'ECONNREFUSED' ? 'PAPERCLIP_CONEXAO_RECUSADA' : 'PAPERCLIP_INDISPONIVEL');
+    });
     req.on('close', () => clearTimeout(deadline));
     req.end();
   });

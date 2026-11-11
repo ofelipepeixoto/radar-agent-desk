@@ -1,5 +1,9 @@
 # Histórico de versões
 
+## Em revisão
+
+- v0.1.1: diagnóstico offline de Node e ambiente; mensagens distintas para conexão recusada, resposta incompleta e versão incompatível.
+
 ## 0.1.0 | 11/11/2026
 
 - Primeira base pública do Radar Agent Desk.

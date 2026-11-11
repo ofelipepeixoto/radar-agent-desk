@@ -15,7 +15,7 @@ node bin/radar-agent-desk.mjs check
 node bin/radar-agent-desk.mjs demo
 ```
 
-O primeiro comando do kit checa o Node. O segundo mostra um resumo fictício na tela. Não é preciso rodar `npm install`.
+O primeiro comando do kit checa o Node. Se estiver no Windows, `node bin/radar-agent-desk.mjs doctor` também informa se o ambiente foi reconhecido como WSL. O segundo mostra um resumo fictício na tela. Não é preciso rodar `npm install`.
 
 | Quero | Comando |
 | --- | --- |
