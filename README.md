@@ -27,6 +27,8 @@ O primeiro comando do kit checa o Node. Se estiver no Windows, `node bin/radar-a
 
 Também dá para importar [uma linha de totais de planilha](docs/IMPORTACAO-OFFLINE.md) em CSV, sem rede. O [contrato de entrada e saída](docs/SNAPSHOT.md) explica a diferença entre números informados pelo operador, leitura local e recorte MCP. Tarefas em execução ou bloqueadas já estão incluídas em abertas. Uma fonte indisponível não equivale a zero.
 
+A [avaliação de MCP, n8n e Cloudflare](docs/INTEGRACOES-CONTROLADAS.md) registra critérios de teste. O modo offline não depende dessas integrações.
+
 ## Como o projeto evolui
 
 O [histórico de construção](docs/HISTORICO.md) documenta as decisões e verificações. O [changelog](CHANGELOG.md) registra o que entrou em cada versão. Use uma branch por melhoria, verifique a mudança localmente e abra uma PR para revisão. A CI roda em pushes e PRs.
