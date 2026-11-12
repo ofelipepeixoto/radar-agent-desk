@@ -6,7 +6,7 @@ Você escolhe o que entra, confere o JSON reduzido e só então decide se quer a
 
 ## Experimente no Ubuntu ou WSL
 
-Requer Git e Node.js 24.11 ou superior no terminal em que vai rodar. No Windows, abra o Ubuntu com `wsl -d Ubuntu` antes de colar este bloco. O [guia de instalação](docs/INSTALACAO-WINDOWS.md) explica cada etapa.
+Requer Git e Node.js 24.11 ou superior no terminal em que vai rodar. Para uso diário, prefira a atualização mais recente da linha 24 LTS: [24.22.3 na revisão de segurança](https://nodejs.org/pt-br/blog/release/v24.22.3). No Windows, abra o Ubuntu com `wsl -d Ubuntu` antes de colar este bloco. O [guia de instalação](docs/INSTALACAO-WINDOWS.md) explica cada etapa.
 
 ```bash
 git clone https://github.com/ofelipepeixoto/radar-agent-desk.git
@@ -19,16 +19,18 @@ O primeiro comando do kit checa o Node. Se estiver no Windows, `node bin/radar-a
 
 | Quero | Comando |
 | --- | --- |
-| Guardar a demo | `mkdir -p local && node bin/radar-agent-desk.mjs demo --out local/demo.json` |
+| Guardar a demo | `test ! -L local && mkdir -p -m 700 local && node bin/radar-agent-desk.mjs demo --out local/demo.json` |
 | Gerar um resumo dos meus totais | Copie o [exemplo](fixtures/contagens-exemplo.json) para `local/entrada.json`, edite apenas os cinco números e rode `node bin/radar-agent-desk.mjs snapshot --input local/entrada.json --out local/resumo.json`. |
 | Revisar no ChatGPT | Anexe só o JSON de saída e use o [prompt de revisão](docs/REVISAO-CHATGPT.md). |
-| Consultar meu Paperclip local | Siga o [guia do adaptador opcional](docs/INSTALACAO-WINDOWS.md#3-adaptador-opcional-paperclip-local). O servidor é instalado à parte. Veja também a [avaliação de versões e o ensaio de restauração](docs/OPERACAO-LOCAL.md). |
+| Consultar meu Paperclip local | Siga o [guia do adaptador opcional](docs/INSTALACAO-WINDOWS.md#3-adaptador-opcional-paperclip-local). O servidor é instalado à parte para laboratório em loopback, com dados fictícios. Veja também a [avaliação de versões e o ensaio de restauração](docs/OPERACAO-LOCAL.md). |
 | Operar agentes no Paperclip | Siga o [passo a passo para Windows e WSL2](docs/AGENTES-PAPERCLIP-WSL.md): login do Codex, teste de conexão, primeira tarefa e revisão manual. |
 | Conferir conectores do painel | Use a [auditoria de conectores](docs/AUDITORIA-CONECTORES.md) para separar conexão salva, permissões e teste observado. |
 | Traduzir rótulos do painel | Veja a [tradução local e parcial no Chrome](docs/INTERFACE-PT-BR.md). |
 | Evoluir pelo terminal | Siga [Desenvolver com Codex](docs/DESENVOLVER-COM-CODEX.md) e pegue a primeira tarefa do [roadmap](ROADMAP.md). |
 
 Também dá para importar [uma linha de totais de planilha](docs/IMPORTACAO-OFFLINE.md) em CSV, sem rede. O [contrato de entrada e saída](docs/SNAPSHOT.md) explica a diferença entre números informados pelo operador, leitura local e recorte MCP. Tarefas em execução ou bloqueadas já estão incluídas em abertas. Uma fonte indisponível não equivale a zero.
+
+Guarde entradas e saídas em uma pasta privada do seu usuário, sem links simbólicos no caminho. No Ubuntu ou WSL2, use uma pasta no seu diretório pessoal e mantenha `local/` acessível apenas a você (`chmod 700 local` se ela já existia e for um diretório seu).
 
 A [avaliação de MCP, n8n e Cloudflare](docs/INTEGRACOES-CONTROLADAS.md) registra critérios de teste. O modo offline não depende dessas integrações.
 
@@ -42,6 +44,6 @@ python3 -m unittest discover -s test -p 'test_plugin_pack.py'
 python3 scripts/pack-plugin.py --check
 ```
 
-O teste Node cobre importação offline, CLI e um servidor HTTP de teste. Python 3 é necessário somente para verificar e empacotar a [skill opcional](plugin/radar-agent-desk-review). Ela contém instruções; não é um servidor MCP nem foi homologada para instalação no ChatGPT.
+O teste Node cobre importação offline, CLI e um servidor HTTP de teste. Para verificar e empacotar a [skill opcional](plugin/radar-agent-desk-review), use Python 3 no Linux ou WSL2. O ZIP contém as instruções e a licença MIT. A skill não é um servidor MCP nem foi homologada para instalação no ChatGPT.
 
 O Radar Agent Desk tem código e histórico próprios e usa a [licença MIT](LICENSE). O [Paperclip](https://github.com/paperclipai/paperclip) é um projeto externo, instalado separadamente se o adaptador for usado. Veja a [origem dos componentes](docs/HISTORICO.md#origem-e-licenças) e os [limites de segurança](SECURITY.md).

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { constants as fs, closeSync, fstatSync, openSync, readSync, writeFileSync } from 'node:fs';
+import { constants as fs, closeSync, fstatSync, lstatSync, openSync, readSync, writeFileSync } from 'node:fs';
+import { basename, join, parse, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { captureLocal, probeLocal, LocalError, PAPERCLIP_VERSION, HTTP_DEADLINE_MS } from '../src/paperclip-local.mjs';
@@ -19,12 +20,35 @@ const help = `Radar Agent Desk\n\n` +
   `  node bin/radar-agent-desk.mjs snapshot --format csv --input CONTAGENS.csv [--out local/resumo.json]\n` +
   `\nImportação offline por padrão. Captura opcional de Paperclip local. A saída não sobrescreve arquivos.\n`;
 
+function directFilePath(path) {
+  const endsInSeparator = process.platform === 'win32' ? /[\\/]$/.test(path) : path.endsWith('/');
+  const leaf = basename(path);
+  if (endsInSeparator || !leaf || leaf === '.' || leaf === '..') throw new Error();
+
+  const fullPath = resolve(path);
+  const { dir, root } = parse(fullPath);
+  let parent = root;
+  // Check each component, not just the last parent. This check and the open
+  // are separate operations; use a directory that other processes cannot change.
+  for (const name of dir.slice(root.length).split(sep).filter(Boolean)) {
+    parent = join(parent, name);
+    const entry = lstatSync(parent);
+    if (!entry.isDirectory() || entry.isSymbolicLink()) throw new Error();
+  }
+  return fullPath;
+}
+
 function safeRead(path) {
   let fd;
   try {
-    fd = openSync(path, fs.O_RDONLY | (fs.O_NOFOLLOW ?? 0) | (fs.O_NONBLOCK ?? 0));
-    const stat = fstatSync(fd);
-    if (!stat.isFile() || stat.size > MAX_SNAPSHOT_BYTES) throw new LocalError('ARQUIVO_INVALIDO_OU_GRANDE');
+    const input = directFilePath(path);
+    const entry = lstatSync(input, { bigint: true });
+    if (entry.isSymbolicLink()) throw new LocalError('ARQUIVO_INDISPONIVEL');
+    if (!entry.isFile() || entry.size > BigInt(MAX_SNAPSHOT_BYTES)) throw new LocalError('ARQUIVO_INVALIDO_OU_GRANDE');
+    fd = openSync(input, fs.O_RDONLY | (fs.O_NOFOLLOW ?? 0) | (fs.O_NONBLOCK ?? 0));
+    const stat = fstatSync(fd, { bigint: true });
+    if (!stat.isFile() || stat.size > BigInt(MAX_SNAPSHOT_BYTES)) throw new LocalError('ARQUIVO_INVALIDO_OU_GRANDE');
+    if (stat.dev !== entry.dev || stat.ino !== entry.ino) throw new LocalError('ARQUIVO_INDISPONIVEL');
     const bytes = Buffer.alloc(MAX_SNAPSHOT_BYTES + 1);
     let size = 0;
     while (size < bytes.length) {
@@ -40,7 +64,7 @@ function safeRead(path) {
 function emit(value, destination) {
   const output = JSON.stringify(value, null, 2) + '\n';
   if (!destination) { process.stdout.write(output); return; }
-  try { writeFileSync(destination, output, {mode:0o600, flag:'wx'}); }
+  try { writeFileSync(directFilePath(destination), output, {mode:0o600, flag:'wx'}); }
   catch { throw new LocalError('SAIDA_NAO_GRAVADA_CONFIRA_PASTA_E_NOME_NOVO'); }
 }
 

@@ -1,4 +1,5 @@
 import { request } from 'node:http';
+import { parseSnapshotJson } from './snapshot.mjs';
 
 export const PAPERCLIP_VERSION = '2026.1106.0';
 export const PAPERCLIP_COMMIT = 'd69631b01b9c658f80bf8bed389863dce82643e1';
@@ -49,8 +50,17 @@ function getJson(port, path) {
       });
       res.on('error', () => fail('PAPERCLIP_INDISPONIVEL'));
       res.on('end', () => {
-        try { resolve(JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(Buffer.concat(parts)))); }
-        catch { fail('PAPERCLIP_RESPOSTA_INVALIDA'); }
+        try {
+          const payload = parseSnapshotJson(Buffer.concat(parts));
+          // The REST endpoints do not return tool outcomes or error envelopes on success.
+          if (plain(payload) && (Object.hasOwn(payload, 'outcome') ||
+              (Object.hasOwn(payload, 'isError') && payload.isError !== false) ||
+              (Object.hasOwn(payload, 'error') && payload.error !== null))) {
+            fail('PAPERCLIP_RESPOSTA_INVALIDA');
+            return;
+          }
+          resolve(payload);
+        } catch { fail('PAPERCLIP_RESPOSTA_INVALIDA'); }
       });
     });
     const deadline = setTimeout(() => { fail('PAPERCLIP_TEMPO_ESGOTADO'); req.destroy(); }, HTTP_DEADLINE_MS);

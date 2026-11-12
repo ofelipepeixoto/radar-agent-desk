@@ -119,7 +119,8 @@ test("only injects after user click on an allowed loopback tab and only into its
   runInContext(asset("background.js"), context, { timeout: 1000 });
   assert.equal(injections.length, 0);
   for (const url of [undefined, "https://localhost:3100/", "http://localhost:3200/",
-    "http://localhost.example.com:3100/", "http://u:p@localhost:3100/", "http://127.0.0.2:3100/", "file:///tmp/Paperclip"]) {
+    "http://localhost.example.com:3100/", "http://u:p@localhost:3100/", "http://127.0.0.2:3100/", "file:///tmp/Paperclip",
+    "blob:http://127.0.0.1:3100/00000000-0000-0000-0000-000000000001"]) {
     await click({ id: 12, url });
   }
   assert.equal(injections.length, 0);
@@ -136,6 +137,7 @@ test("rechecks origin, tab frame and Paperclip layout before touching the DOM", 
   for (const options of [
     { href: "http://example.com:3100/demo/agents/exemplo/overview" },
     { href: "http://localhost:5100/demo/agents/exemplo/overview" },
+    { href: "blob:http://127.0.0.1:3100/00000000-0000-0000-0000-000000000001" },
     { title: "Outra aplicação chamada NotPaperclip" }, { topFrame: false },
     { validLayout: false }, { meta: false },
   ]) {

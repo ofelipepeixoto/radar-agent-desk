@@ -179,6 +179,45 @@ test('fails closed if the selected company or dashboard belongs to a different c
   await assert.rejects(captureLocal({ companyId, port: wrongDashboard.port }), { code: 'EMPRESA_DIVERGENTE' });
 });
 
+test('local capture rejects ambiguous JSON and error-marked HTTP 200 without returning counts', async (t) => {
+  const routes = ['/api/health', base, dashboard];
+  const healthy = {
+    '/api/health': JSON.stringify(health),
+    [base]: JSON.stringify({ id: companyId }),
+    [dashboard]: JSON.stringify({ companyId, tasks, pendingApprovals: 1, isError: false, error: null }),
+  };
+  const rawSource = (changes = {}) => {
+    const bodies = { ...healthy, ...changes };
+    return listen(t, (req, res) => {
+      if (!Object.hasOwn(bodies, req.url)) { json(res, {}, 404); return; }
+      res.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
+      res.end(bodies[req.url]);
+    });
+  };
+  const cases = [
+    ['/api/health', JSON.stringify({ ...health, isError: true, detail: privateText })],
+    [base, JSON.stringify({ id: companyId, error: privateText })],
+    [dashboard, JSON.stringify({ companyId, tasks, pendingApprovals: 1, outcome: 'error', detail: privateText })],
+    [dashboard, `{"companyId":"${otherCompany}","comp\\u0061nyId":"${companyId}","tasks":${JSON.stringify(tasks)},"pendingApprovals":1}`],
+  ];
+  for (const [path, body] of cases) {
+    const { port, seen } = await rawSource({ [path]: body });
+    await assert.rejects(run(process.execPath, [bin, 'capture', '--company', companyId, '--port', port]), (error) => {
+      assert.equal(error.code, 1);
+      assert.equal(error.stdout, '');
+      assert.equal(error.stderr, 'Radar Agent Desk: PAPERCLIP_RESPOSTA_INVALIDA\n');
+      return true;
+    });
+    assert.deepEqual(seen.map(({ method, path }) => [method, path]),
+      routes.slice(0, routes.indexOf(path) + 1).map((route) => ['GET', route]));
+  }
+
+  const valid = await rawSource();
+  assert.deepEqual((await captureLocal({ companyId, port: valid.port })).dashboard,
+    { companyId, tasks, pendingApprovals: 1 });
+  assert.deepEqual(valid.seen.map(({ method, path }) => [method, path]), routes.map((path) => ['GET', path]));
+});
+
 test('rejects an oversized response advertised in Content-Length or delivered in chunks', async (t) => {
   const payload = JSON.stringify({ message: privateText.repeat(16_000) });
   for (const advertised of [true, false]) {
