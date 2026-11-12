@@ -1,6 +1,6 @@
 # Radar Agent Desk
 
-Kit de Carlos Felipe Peixoto para transformar contagens de tarefas, bloqueios e aprovações em um resumo que pode ser revisado no ChatGPT. Roda no terminal. A importação offline funciona sem conta, servidor, banco ou conexão com o Paperclip.
+Kit local para transformar contagens de tarefas, bloqueios e aprovações em um resumo para revisão no ChatGPT. Roda no terminal. A importação offline funciona sem conta, servidor, banco ou conexão com o Paperclip.
 
 Você escolhe o que entra, confere o JSON reduzido e só então decide se quer anexá-lo. A saída não inclui títulos, IDs, comentários, configurações ou credenciais. Os totais também podem revelar atividade: revise antes de compartilhar.
 
@@ -44,4 +44,4 @@ python3 scripts/pack-plugin.py --check
 
 O teste Node cobre importação offline, CLI e um servidor HTTP de teste. Python 3 é necessário somente para verificar e empacotar a [skill opcional](plugin/radar-agent-desk-review). Ela contém instruções; não é um servidor MCP nem foi homologada para instalação no ChatGPT.
 
-Código do Radar Agent Desk sob [MIT](LICENSE). Este repositório tem histórico próprio e não é um fork. O [Paperclip](https://github.com/paperclipai/paperclip) é um projeto externo, instalado separadamente se o adaptador for usado. Veja a [origem dos componentes](docs/HISTORICO.md#origem-e-licenças) e os [limites de segurança](SECURITY.md).
+O Radar Agent Desk tem código e histórico próprios e usa a [licença MIT](LICENSE). O [Paperclip](https://github.com/paperclipai/paperclip) é um projeto externo, instalado separadamente se o adaptador for usado. Veja a [origem dos componentes](docs/HISTORICO.md#origem-e-licenças) e os [limites de segurança](SECURITY.md).
