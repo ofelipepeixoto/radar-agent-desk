@@ -2,6 +2,10 @@
 
 ## Em revisão
 
+- Orientações de segurança atualizadas para Node.js 24 LTS com correções recentes, pastas privadas de entrada e saída, e uso do adaptador Paperclip apenas em laboratório local com dados fictícios.
+- A CLI rejeita links simbólicos nas pastas de entrada e saída; o adaptador Paperclip rejeita JSON ambíguo ou respostas com envelope de erro.
+- A tradução local exige uma aba HTTP na origem permitida. O empacotador usa operações de arquivo que recusam links simbólicos no Linux/WSL e inclui a licença MIT no ZIP.
+
 - Guia de operação no Paperclip local com Codex no WSL2: teste de conexão por assinatura, primeiras tarefas de Camaleão, Engenharia Radar e Revisão Radar, encerramento manual e diagnóstico da pasta de trabalho. O roteiro diferencia assinatura, API e revisão de resumo.
 
 - Roteiro de auditoria dos conectores do Paperclip: inventário, permissões, testes de leitura e registro público sem dados da conta. O kit e a captura em loopback não mudaram.

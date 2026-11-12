@@ -7,7 +7,8 @@
     "http://localhost:4310", "http://127.0.0.1:4310",
   ]);
   const current = new URL(location.href);
-  if (!origins.has(current.origin) || current.username || current.password || window !== window.top) {
+  if (current.protocol !== "http:" || !origins.has(current.origin) ||
+      current.username || current.password || window !== window.top) {
     return "refused";
   }
 

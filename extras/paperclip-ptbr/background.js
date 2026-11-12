@@ -10,7 +10,7 @@ const localOrigins = new Set([
 function allowedTab(value) {
   try {
     const url = new URL(value);
-    return localOrigins.has(url.origin) && !url.username && !url.password;
+    return url.protocol === "http:" && localOrigins.has(url.origin) && !url.username && !url.password;
   } catch {
     return false;
   }
